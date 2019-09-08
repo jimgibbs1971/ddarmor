@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Dragon's Dogma (Dark Arisen) - Armor Set Calculator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/jquery-ui.min.css">
+	<link rel="stylesheet" href="css/progress-wall.css">
+	<link rel="stylesheet" href="css/ui.css">
+	<script src="js/armor.js"></script>
+	<script src="js/vars.js"></script>
+	<script src="js/vocation-reserved.js"></script>
+	<script src="js/sliderui.js"></script>
+	<script src="js/set-iterator.js"></script>
+	<script src="js/calc-armorset-progress-runnable.js"></script>
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/jquery-ui.min.js"></script>
+	<script src="js/jquery.ui.touch-punch.min.js"></script>
+	<script src="js/progress-wall.js"></script>
+	<script src="js/results.js"></script>
+	<script src="js/init.js"></script>
+</head>
+
+<body>
+	<div id="armorPopup"></div>
+	<div class="wall_wrapper">
+		<div class="wall_vertical_align">
+			<div class="wall_background"></div>
+			<div class="wall_vertical_align">
+				<div class="wall_content_outer_wrapper">
+					<div class="wall_content_wrapper">
+						<div class="wall_content">
+							<div id="progress_text"></div>
+							<div id="progress_bar">
+								<div class="progress-label"></div>
+							</div>
+							<button id="progress_cancel">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="help_wall_wrapper">
+		<div class="wall_vertical_align">
+			<div class="wall_background"></div>
+			<div class="wall_vertical_align">
+				<div class="wall_content_outer_wrapper">
+					<div class="wall_content_wrapper">
+						<div class="wall_content">
+							<div class="helpPanel">
+								<h1>Dragon's Dogma (Dark Arisen) - Armor Set Calculator</h1>
+
+								<ol>
+									<li>Select vocation, or click the 'all vocations' button.</li>
+									<li>Select importance weightings. (blue sliders)</li>
+									<li>If required, select minimums/maximums.* (green/red sliders)</li>
+									<li>Click 'Calculate' button.</li>
+								</ol>
+								*: There may be no possible sets that meet minimum/maximum criteria.
+								<h2>Notes</h2>
+								<ul>
+									<li>The number of permutations calculated is limited by pre-filtering each armor
+										type to the ten with highest weighted score for the search. This is necessary to
+										make searches complete in a reasonable time, but the removal of lower-score
+										permuations may	make min/max criteria impossible to meet.</li>
+									<li>Project is open-sourced under MIT license, you can do what you like with it.</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="top-container">
+		<div class="label-container">
+			<div class="heading"><span style="font-weight:bold;">Vocation</span></div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+		</div>
+
+		<div class="widget-container">
+			<div>
+				<label for="fighter"><img src="img/fighter.png" alt="fighter" title="fighter"></label>
+				<input type="checkbox" name="vocation" value="fighter" id="fighter" title="fighter"
+					class="class-select">
+				<label for="strider"><img src="img/strider.png" alt="strider" title="strider"></label>
+				<input type="checkbox" name="vocation" value="strider" id="strider" title="strider"
+					class="class-select">
+				<label for="mage"><img src="img/mage.png" alt="mage" title="mage"></label>
+				<input type="checkbox" name="vocation" value="mage" id="mage" title="mage" class="class-select">
+			</div>
+			<div>
+				<label for="assassin"><img src="img/assassin.png" alt="assassin" title="assassin"></label>
+				<input type="checkbox" name="vocation" value="assassin" id="assassin" title="assassin"
+					class="class-select">
+				<label for="magickArcher"><img src="img/magickArcher.png" alt="magick archer"
+						title="magick archer"></label>
+				<input type="checkbox" name="vocation" value="magickArcher" id="magickArcher" title="magick archer"
+					class="class-select">
+				<label for="mysticKnight"><img src="img/mysticKnight.png" alt="mystic knight"
+						title="mystic knight"></label>
+				<input type="checkbox" name="vocation" value="mysticKnight" id="mysticKnight" title="mystic knight"
+					class="class-select">
+				<img src="img/allVocations.png" id="allVocations" alt="all vocations" title="all vocations"
+					class="class-selector">
+			</div>
+			<div>
+				<label for="warrior"><img src="img/warrior.png" alt="warrior" title="warrior"></label>
+				<input type="checkbox" name="vocation" value="warrior" id="warrior" title="warrior"
+					class="class-select">
+				<label for="ranger"><img src="img/ranger.png" alt="ranger" title="ranger"></label>
+				<input type="checkbox" name="vocation" value="ranger" id="ranger" title="ranger" class="class-select">
+				<label for="sorcerer"><img src="img/sorcerer.png" alt="sorcerer" title="sorcerer"></label>
+				<input type="checkbox" name="vocation" value="sorcerer" id="sorcerer" title="sorcerer"
+					class="class-select">
+				<img src="img/anyVocation.png" id="anyVocation" alt="any vocation" title="any vocation"
+					class="class-selector">
+			</div>
+		</div>
+		<div class="top-container">
+			<div class="label-container">
+				<button id="help">Help / About</button>
+				<button id="reset">Reset</button>
+				<button id="calculate">Calculate</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="outer-container">
+		<div class="label-container">
+			<div class="heading"><span style="font-weight:bold;">Reserved Armor</span></div>
+			<div>Head Armor</div>
+			<div>Torso Armor</div>
+			<div>Chest Clothing</div>
+			<div>Arm Armor</div>
+			<div>Leg Armor</div>
+			<div>Leg Clothing</div>
+			<div>Cloak</div>
+			<div class="heading"><span style="font-weight:bold;">Primary Stats</span></div>
+			<div>Weight</div>
+			<div>Defense</div>
+			<div>Magick Defense</div>
+			<div>Piercing Resist</div>
+			<div>Striking Resist</div>
+			<div>Stagger Resist</div>
+			<div>Knockdown Resist</div>
+			<div class="heading"><span style="font-weight:bold;">Elemental</span></div>
+			<div>Dark</div>
+			<div>Fire</div>
+			<div>Holy</div>
+			<div>Ice</div>
+			<div>Lightning</div>
+		</div>
+		<div class="widget-container">
+			<div>&nbsp;</div>
+			<div>
+				<div class="ui-widget">
+					<input id="head_armor" class="armor-select base-armor">
+				</div>
+			</div>
+			<div>
+				<div class="ui-widget">
+					<input id="torso_armor" class="armor-select base-armor">
+				</div>
+			</div>
+			<div>
+				<div class="ui-widget">
+					<input id="chest_clothing" class="armor-select base-armor">
+				</div>
+			</div>
+			<div>
+				<div class="ui-widget">
+					<input id="arm_armor" class="armor-select base-armor">
+				</div>
+			</div>
+			<div>
+				<div class="ui-widget">
+					<input id="leg_armor" class="armor-select base-armor">
+				</div>
+			</div>
+			<div>
+				<div class="ui-widget">
+					<input id="leg_clothing" class="armor-select base-armor">
+				</div>
+			</div>
+			<div>
+				<div class="ui-widget">
+					<input id="cloak" class="armor-select base-armor">
+				</div>
+			</div>
+			<div>&nbsp;</div>
+			<div>
+				<div id="weight" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0" style="display:none;">
+					</div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="defense" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="magickDefense" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="piercingResist" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="strikingResist" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="staggerResist" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="knockdownResist" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>&nbsp;</div>
+			<div>
+				<div id="dark" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="fire" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="holy" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="ice" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="lightning" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="outer-container">
+		<div class="label-container">
+			<div class="heading"><span style="font-weight:bold;">Debilitation</span></div>
+			<div>Blindness</div>
+			<div>Burning</div>
+			<div>Curse</div>
+			<div>Drenched</div>
+			<div>Frozen</div>
+			<div>&darr; Defense</div>
+			<div>&darr; Strength</div>
+			<div>&darr; Magick Defense</div>
+			<div>&darr; Magick</div>
+			<div>Petrification</div>
+			<div>Poison</div>
+			<div>Possession</div>
+			<div>Silence</div>
+			<div>Skill Stifling</div>
+			<div>Sleep</div>
+			<div>Tarring</div>
+			<div>Thundershock</div>
+			<div>Torpor</div>
+		</div>
+		<div class="widget-container">
+			<div>&nbsp;</div>
+			<div>
+				<div id="blindness" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="burning" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="curse" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="drenched" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="frozen" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="loweredDefense" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="loweredStrength" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="loweredMagickDefense" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="loweredMagick" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="petrification" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="poison" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="possession" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="silence" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="skillStifling" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="sleep" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="tarring" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="thundershock" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+			<div>
+				<div id="torpor" class="slider">
+					<div class="ui-slider-handle slider-handle slider-handle-min" data-index="0"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-prio" data-index="1"></div>
+					<div class="ui-slider-handle slider-handle slider-handle-max" data-index="2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="resultPanel"></div>
+</body>
+
+</html>

@@ -1,0 +1,153 @@
+body {
+    background-color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:16px;
+    color: #333;
+}
+div.slider {
+    vertical-align: middle;
+    width: 400px;
+    display: inline-block;
+}
+.armor-select {
+    width: 400px;
+}
+
+.ui-slider-handle.slider-handle {
+    font-size:80%;
+    height: 1.1em;
+    margin-top: 0.15em;
+    width: 2em;
+    margin-left: -1em;
+    text-align: center;
+}
+.ui-slider-handle.slider-handle-min {
+    margin-top: -1.2em;
+}
+.ui-slider-handle.slider-handle-prio.ui-state-default {
+        background-color:#eef;
+}
+.ui-slider-handle.slider-handle-prio.ui-state-active {
+        background-color:blue;
+}
+.ui-slider-handle.slider-handle-min.ui-state-default {
+        background-color:#efe;
+}
+.ui-slider-handle.slider-handle-min.ui-state-active {
+        background-color:green;
+}
+.ui-slider-handle.slider-handle-max {
+    margin-top: 1.5em;
+}
+.ui-slider-handle.slider-handle-max.ui-state-default {
+    background-color:#fee;
+}
+.ui-slider-handle.slider-handle-max.ui-state-active {
+    background-color:red;
+}
+.top-container {
+    display: flex;
+    flex-direction: row;
+}
+.top-container .label-container {
+    margin-right:75px;
+}
+.outer-container {
+    display: inline-flex;
+    flex-direction: row;
+}
+.label-container {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: right;
+    margin-right: 0.5em;
+    white-space: nowrap;
+}
+.widget-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-left: 1em;
+    margin-right: 2em;
+}
+.widget-container>div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height:55px;
+}
+
+.class-select {
+    margin-right: 0.7em;
+}
+.heading {
+    align-self: flex-start;
+}
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+}
+
+#help, #calculate, #reset {
+    font-size:1.4em;
+    padding: 16px;
+    background-color:#eee;
+    border:1px solid #ccc;
+}
+
+#resultPanel {
+    margin-top: 2em;
+}
+.result-table, .result-table td {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+}
+.result-table td {
+    padding: 0.5em;
+    font-size:16px;
+    vertical-align: top;
+}
+.result-armor-outer {
+    display: inline-flex;
+    flex-direction: column;
+}
+.result-armor-inner {
+    display: flex;
+    flex-direction: row;
+}
+.result-armor-name {
+    cursor: help;
+}
+.result-armor-attr {
+    text-transform: capitalize;
+    width: 140px;
+}
+
+#armorPopup {
+    display:none;
+    background-color:white;
+    border: 1px solid #ccc;
+    padding: 0.5em;
+}
+.popup-type {
+    font-style:italic;
+    margin-bottom: 0.5em;
+}
+
+.popup-title {
+    font-weight:bold;
+    display:inline-block;
+}
+
+.help_wall_wrapper {
+    display: none;
+}
+.helpPanel {
+    text-align: left;
+}
